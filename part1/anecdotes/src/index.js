@@ -6,9 +6,19 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+const Top = ({anecdotes, top, point}) => {
+    return (
+        <div>
+            {anecdotes[top]}<br/> has {point} votes
+        </div>
+    );
+
+};
+
 const App = (props) => {
     const [selected, setSelected] = useState(0);
     const [points, setPoints] = useState([0,0,0,0,0,0]);
+    const [top, setTop] = useState(0);
 
     const randomAnecdote = () => {
         setSelected(
@@ -20,14 +30,20 @@ const App = (props) => {
         const updatedPoints = [...points];
         updatedPoints[idx]++;
         setPoints(updatedPoints);
+        // find top anecdote (the idx position)
+        let i = updatedPoints.indexOf(Math.max(...updatedPoints));
+        setTop(i);
     };
 
     return (
         <div>
+            <h2>anecdote of the day</h2>
             {props.anecdotes[selected]}<br/>
             has {points[selected]} votes<br/>
             <button onClick={()=> voteAnecdote(selected)}>Vote</button>
             <button onClick={randomAnecdote}>Next anecdote</button>
+            <h2>top anecdote of all time</h2>
+            <Top anecdotes={props.anecdotes} top={top} point={points[top]}/>
         </div>
     )
 };
