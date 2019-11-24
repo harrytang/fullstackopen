@@ -18,18 +18,27 @@ const Statistics = ({good,neutral,bad}) => {
             {
                 (good+neutral+bad)>0?(
                     <div>
-                    good: {good}<br />
-                    neutral: {neutral}<br />
-                    bad: {bad}<br/>
-                    all: {good+neutral+bad}<br/>
-                    average: {(good-bad)/(good+neutral+bad)}<br/>
-                    positive: {good/(good+neutral+bad)*100}%
+                        <Statistic text="good" value={good}/>
+                        <Statistic text="neutral" value={neutral}/>
+                        <Statistic text="bad" value={bad}/>
+                        <Statistic text="all" value={good+neutral+bad}/>
+                        <Statistic text="average" value={(good-bad)/(good+neutral+bad)}/>
+                        <Statistic text="positive" value={good/(good+neutral+bad)*100+'%'}/>
                     </div>
                 )
                 :(
                     <div>No info yet</div>
                 )
             }
+        </div>
+    );
+};
+
+/* Statistic */
+const Statistic = ({text, value})=>{
+    return (
+        <div>
+            {text} {value}
         </div>
     );
 };
