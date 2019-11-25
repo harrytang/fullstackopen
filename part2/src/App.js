@@ -18,8 +18,15 @@ const App = () => {
 
     const addPerson = (e) => {
         e.preventDefault();
-        setPersons(persons.concat({name: newName}));
-        setNewName('');
+        if(persons.find(person=> person.name===newName)){
+            alert(`${newName} is already exist!`);
+        }
+        else {
+            setPersons(persons.concat({name: newName}));
+            setNewName('');
+        }
+
+
     };
 
 
