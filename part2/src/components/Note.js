@@ -4,10 +4,12 @@
  * @copyright Copyright (c) 2019 Power Kernel
  */
 
-import React from 'react';
+import React from 'react'
 
-const Header = (props) => {
-    return (<h1>{props.course}</h1>);
+const Note = ({note}) => {
+    return (
+        <li>{note.content}</li>
+    )
 };
 
-export default Header;
+export default Note;
