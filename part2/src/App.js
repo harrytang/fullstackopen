@@ -5,6 +5,9 @@
  */
 
 import React, {useState} from 'react'
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -15,6 +18,7 @@ const App = () => {
         {name: 'Harry Tang', 'number': '330-551-3148'}
 
     ]);
+
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [search, setSearch] = useState('');
@@ -46,33 +50,20 @@ const App = () => {
     };
 
     // search
-    const records = search ===''
+    const records = search === ''
         ? persons
-        : persons.filter(person=>person.name.search(new RegExp(search,"i"))>-1);
+        : persons.filter(person => person.name.search(new RegExp(search, "i")) > -1);
 
     return (
         <div>
             <h1>Phonebook</h1>
 
-            <div>
-                search name: <input value={search} onChange={handlerSearch}/>
-            </div>
+            <Filter search={search} handlerSearch={handlerSearch}/>
 
-            <h2>Add new</h2>
+            <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber}
+                        handlerNameChange={handlerNameChange} handlerNumberChange={handlerNumberChange}/>
 
-            <form onSubmit={addPerson}>
-                <div>
-                    name: <input value={newName} onChange={handlerNameChange}/>
-                </div>
-                <div>
-                    number: <input value={newNumber} onChange={handlerNumberChange}/>
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
-            <h2>Numbers</h2>
-            {records.map((person, i) => <div key={i}>{person.name} {person.number}</div>)}
+            <Persons records={records}/>
         </div>
     )
 };
