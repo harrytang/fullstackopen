@@ -7,6 +7,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+
 import Course from "./components/Course";
 
 /* Main App */
@@ -62,7 +63,7 @@ const App = () => {
 
     return (
         <div>
-            {courses.map(course=><Course course={course}/>)}
+            {courses.map(course => <Course course={course}/>)}
         </div>
     )
 };
