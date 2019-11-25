@@ -7,11 +7,12 @@
 import React from 'react';
 
 const Total = (props) => {
-    let total = 0;
-    props.parts.map(part => total += part.exercises);
+    const total = props.parts.reduce((c, n) => {
+        return {exercises: c.exercises + n.exercises};
+    });
     return (
         <div>
-            total of {total} exercises
+            total of {total.exercises} exercises
         </div>
     );
 };
