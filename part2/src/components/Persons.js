@@ -10,7 +10,7 @@ const Persons = (props) => {
     return (
         <div>
             <h2>Numbers</h2>
-            {props.records.map((person, i) => <div key={i}>{person.name} {person.number}</div>)}
+            {props.records.map((person, i) => <div key={i}>{person.name} {person.number} <button onClick={()=>{props.deletePersonOf(person.id)}}>delete</button></div>)}
         </div>
     );
 };

@@ -54,6 +54,13 @@ const App = () => {
 
     };
 
+    const deletePersonOf = (id)=>{
+        personService.remove(id)
+            .then(_=>{
+                setPersons(persons.filter(per=>per.id!==id));
+            })
+    };
+
     // search
     const records = search === ''
         ? persons
@@ -68,7 +75,7 @@ const App = () => {
             <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber}
                         handlerNameChange={handlerNameChange} handlerNumberChange={handlerNumberChange}/>
 
-            <Persons records={records}/>
+            <Persons records={records} deletePersonOf={deletePersonOf}/>
         </div>
     )
 };
