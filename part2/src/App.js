@@ -6,66 +6,33 @@
 
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import Filter from "./components/Filter";
-import PersonForm from "./components/PersonForm";
-import Persons from "./components/Persons";
+import Result from "./components/Result";
+
 
 const App = () => {
-    const [persons, setPersons] = useState([]);
-    const [newName, setNewName] = useState('');
-    const [newNumber, setNewNumber] = useState('');
     const [search, setSearch] = useState('');
+    const [countries, setCountries] = useState([]);
 
     // load person from server
     useEffect(() => {
         axios
-            .get('http://localhost:3001/persons')
+            .get('https://restcountries.eu/rest/v2/all')
             .then(response => {
-                setPersons(response.data)
+                setCountries(response.data)
             })
     }, []);
 
-
-    const handlerNameChange = (e) => {
-        setNewName(e.target.value);
-    };
-
-    const handlerNumberChange = (e) => {
-        setNewNumber(e.target.value);
-    };
 
     const handlerSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    const addPerson = (e) => {
-        e.preventDefault();
-        if (persons.find(person => person.name === newName)) {
-            alert(`${newName} is already exist!`);
-        } else {
-            setPersons(persons.concat({name: newName, number: newNumber}));
-            setNewName('');
-            setNewNumber('');
-        }
-
-
-    };
-
-    // search
-    const records = search === ''
-        ? persons
-        : persons.filter(person => person.name.search(new RegExp(search, "i")) > -1);
+    const list = search===''?[]:countries.filter(country=>country.name.search(new RegExp(search, "i"))>-1);
 
     return (
         <div>
-            <h1>Phonebook</h1>
-
-            <Filter search={search} handlerSearch={handlerSearch}/>
-
-            <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber}
-                        handlerNameChange={handlerNameChange} handlerNumberChange={handlerNumberChange}/>
-
-            <Persons records={records}/>
+            find countries: <input value={search} onChange={handlerSearch}/>
+            <Result list={list}/>
         </div>
     )
 };
