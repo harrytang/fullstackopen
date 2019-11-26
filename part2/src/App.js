@@ -4,9 +4,9 @@
  * @copyright Copyright (c) 2019 Power Kernel
  */
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, {useState, useEffect} from 'react';
 import Note from './components/Note';
+import noteService from './services/notes'
 
 const App = (props) => {
     const [notes, setNotes] = useState([]);
@@ -16,18 +16,29 @@ const App = (props) => {
     const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
-        console.log('effect');
-
-        const eventHandler = response => {
-            console.log('promise fulfilled');
-            setNotes(response.data)
-        };
-
-        const promise = axios.get('http://localhost:3001/notes');
-        promise.then(eventHandler)
+        noteService
+            .getAll()
+            .then(initialNotes => {
+                setNotes(initialNotes)
+            })
     }, []);
 
 
+    const toggleImportanceOf = id => {
+        const note = notes.find(n => n.id === id);
+        const changedNote = {...note, important: !note.important};
+        noteService
+            .update(id, changedNote)
+            .then(returnedNote => {
+                setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+            })
+            .catch(error => {
+                alert(
+                    `the note '${note.content}' was already deleted from server`
+                );
+                setNotes(notes.filter(n => n.id !== id))
+            })
+    };
 
     const notesToShow = showAll
         ? notes
@@ -37,11 +48,14 @@ const App = (props) => {
         <Note
             key={note.id}
             note={note}
+            toggleImportance={() => {
+                toggleImportanceOf(note.id)
+            }}
+            label={note.important ? 'mark not important' : 'mark important'}
         />
     );
 
     const handleNoteChange = (event) => {
-        console.log(event.target.value);
         setNewNote(event.target.value);
     };
 
@@ -54,10 +68,15 @@ const App = (props) => {
             id: notes.length + 1,
         };
 
-        setNotes(notes.concat(noteObject));
-        setNewNote('');
-    };
+        noteService
+            .create(noteObject)
+            .then(returnedNote => {
+                setNotes(notes.concat(returnedNote));
+                setNewNote('')
+            })
 
+
+    };
 
 
     return (
@@ -66,7 +85,7 @@ const App = (props) => {
 
             <div>
                 <button onClick={() => setShowAll(!showAll)}>
-                    show {showAll ? 'important' : 'all' }
+                    show {showAll ? 'important' : 'all'}
                 </button>
             </div>
 
