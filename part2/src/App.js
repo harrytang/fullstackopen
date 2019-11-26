@@ -55,10 +55,13 @@ const App = () => {
     };
 
     const deletePersonOf = (id)=>{
-        personService.remove(id)
-            .then(_=>{
-                setPersons(persons.filter(per=>per.id!==id));
-            })
+        if (window.confirm("Do you really want to delete this?")) {
+            personService.remove(id)
+                .then(_=>{
+                    setPersons(persons.filter(per=>per.id!==id));
+                })
+        }
+        
     };
 
     // search
