@@ -9,6 +9,7 @@ import axios from 'axios';
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import personService from "./services/person";
 
 const App = () => {
     const [persons, setPersons] = useState([]);
@@ -43,9 +44,12 @@ const App = () => {
         if (persons.find(person => person.name === newName)) {
             alert(`${newName} is already exist!`);
         } else {
-            setPersons(persons.concat({name: newName, number: newNumber}));
-            setNewName('');
-            setNewNumber('');
+            personService.create({name: newName, number: newNumber})
+                .then(person=>{
+                    setPersons(persons.concat(person));
+                    setNewName('');
+                    setNewNumber('');
+                });
         }
 
 
