@@ -40,8 +40,15 @@ const App = () => {
 
     const addPerson = (e) => {
         e.preventDefault();
-        if (persons.find(person => person.name === newName)) {
-            alert(`${newName} is already exist!`);
+        const idx=persons.findIndex(person => person.name === newName);
+        if (idx>-1) {
+            if (window.confirm(`${newName} is already added to the phonebook, replace the old number with the new one?`)) {
+                personService.update(persons[idx].id, {name: newName, number: newNumber})
+                    .then(data=>{
+                        setPersons(persons.map(per=>per.id!==data.id?per:data));
+                    })
+            }
+
         } else {
             personService.create({name: newName, number: newNumber})
                 .then(person=>{
@@ -61,7 +68,7 @@ const App = () => {
                     setPersons(persons.filter(per=>per.id!==id));
                 })
         }
-        
+
     };
 
     // search
