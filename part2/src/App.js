@@ -9,12 +9,14 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/person";
+import Notification from "./components/Notification";
 
 const App = () => {
     const [persons, setPersons] = useState([]);
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [search, setSearch] = useState('');
+    const [notificationMessage, setNotificationMessage] = useState({message: null, type: null});
 
     // load person from server
     useEffect(() => {
@@ -52,6 +54,16 @@ const App = () => {
         } else {
             personService.create({name: newName, number: newNumber})
                 .then(person=>{
+                    setNotificationMessage({
+                            message: 'person added successfully',
+                            type: 'success'
+                        }
+                    );
+
+                    setTimeout(() => {
+                        setNotificationMessage({message: null})
+                    }, 5000);
+
                     setPersons(persons.concat(person));
                     setNewName('');
                     setNewNumber('');
@@ -67,6 +79,20 @@ const App = () => {
                 .then(_=>{
                     setPersons(persons.filter(per=>per.id!==id));
                 })
+                .catch(error=>{
+                    setPersons(persons.filter(per=>per.id!==id));
+                    setNotificationMessage({
+                            message: `person already removed from the server`,
+                            type: 'error'
+                        }
+                    );
+
+                    setTimeout(() => {
+                        setNotificationMessage({message: null})
+                    }, 5000);
+
+
+                })
         }
 
     };
@@ -79,6 +105,8 @@ const App = () => {
     return (
         <div>
             <h1>Phonebook</h1>
+
+            <Notification message={notificationMessage} />
 
             <Filter search={search} handlerSearch={handlerSearch}/>
 
