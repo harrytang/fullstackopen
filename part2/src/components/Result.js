@@ -5,27 +5,14 @@
  */
 
 import React from 'react';
+import Country from "./Country";
+
 
 const Result = (props) => {
 
     if (props.list.length === 1) {
         return (
-            <div>
-                <h2>{props.list[0].name}</h2>
-                <div>capital {props.list[0].capital}</div>
-                <div>population {props.list[0].population}</div>
-                <h2>languages</h2>
-                <ul>
-                    {
-                        props.list[0].languages.map(
-                            lang => <li key={lang.iso639_1}>
-                                {lang.name}
-                            </li>
-                        )
-                    }
-                </ul>
-                <div><img src={props.list[0].flag} alt={props.list[0].name} width="150"/></div>
-            </div>
+            <Country country={props.list[0]}/>
         )
     }
 
@@ -35,7 +22,11 @@ const Result = (props) => {
             {
                 props.list.length > 10 ?
                     <div>too many countries, try another filter</div> :
-                    props.list.map(country => <div key={country.alpha3Code}>{country.name}</div>)
+                    props.list.map(country =>
+                        <div key={country.alpha3Code}>
+                            {country.name} <button onClick={props.showCountryHandler} value={country.alpha3Code}>show</button>
+                            {props.showing===country.alpha3Code?<Country country={country}/>:null}
+                        </div>)
             }
 
         </div>

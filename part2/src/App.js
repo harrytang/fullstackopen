@@ -12,6 +12,8 @@ import Result from "./components/Result";
 const App = () => {
     const [search, setSearch] = useState('');
     const [countries, setCountries] = useState([]);
+    const [showing, setShowing] = useState('');
+
 
     // load person from server
     useEffect(() => {
@@ -22,17 +24,21 @@ const App = () => {
             })
     }, []);
 
+    const showCountryHandler = (e) => {
+        setShowing(e.target.value)
+    };
+
 
     const handlerSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    const list = search===''?[]:countries.filter(country=>country.name.search(new RegExp(search, "i"))>-1);
+    const list = search === '' ? [] : countries.filter(country => country.name.search(new RegExp(search, "i")) > -1);
 
     return (
         <div>
             find countries: <input value={search} onChange={handlerSearch}/>
-            <Result list={list}/>
+            <Result list={list} showCountryHandler={showCountryHandler} showing={showing}/>
         </div>
     )
 };
