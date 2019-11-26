@@ -8,7 +8,7 @@ import React from 'react'
 
 const Note = ({note, toggleImportance, label}) => {
     return (
-        <li>
+        <li className="note">
             {note.content} <button onClick={toggleImportance}>{label}</button>
         </li>
     )
