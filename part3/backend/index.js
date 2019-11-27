@@ -39,6 +39,12 @@ app.get('/api/persons/:id', (req, res) => {
     }
 });
 
+app.delete('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id);
+    persons = persons.filter(note => note.id !== id);
+    res.status(204).end()
+});
+
 app.get('/info', (req, res) => {
     res.send(`phonbook has ${persons.length} people.<br/> ${new Date()}`)
 });
