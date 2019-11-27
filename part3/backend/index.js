@@ -59,11 +59,15 @@ app.post('/api/persons', (req, res) => {
     const id = generateID(9);
     const body = req.body;
 
-    console.log(body);
-
     if (!body.name && !body.number) {
         return res.status(400).json({
             error: 'name and/or number is missing'
+        })
+    }
+
+    if(persons.find(person=>person.name.search(new RegExp(body.name, 'i'))>-1)){
+        return res.status(400).json({
+            error: 'name must be unique'
         })
     }
 
