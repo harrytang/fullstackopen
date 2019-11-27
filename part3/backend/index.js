@@ -5,7 +5,10 @@
  */
 
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
+app.use(bodyParser.json());
 
 let persons = [
     {
@@ -43,6 +46,35 @@ app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     persons = persons.filter(note => note.id !== id);
     res.status(204).end()
+});
+
+generateID = (length=6)=> {
+    const min = Math.pow(10, length-1);
+    const max = Math.pow(10, length)-1;
+    return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+
+app.post('/api/persons', (req, res) => {
+    const id = generateID(9);
+    const body = req.body;
+
+    console.log(body);
+
+    if (!body.name && !body.number) {
+        return res.status(400).json({
+            error: 'name and/or number is missing'
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: id
+    };
+
+    persons = persons.concat(person);
+    res.json(person);
 });
 
 app.get('/info', (req, res) => {
