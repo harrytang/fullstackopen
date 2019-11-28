@@ -5,7 +5,14 @@
  */
 
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+
 const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static('build'));
 
 let notes = [
     {
@@ -81,11 +88,7 @@ app.post('/notes', (request, response) => {
     response.json(note);
 });
 
-
-
-console.log(...notes.map(n => n.id)    );
-
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 });
