@@ -69,13 +69,20 @@ router.delete('/:id', async (request, response, next) => {
  */
 router.put('/:id', async (request, response, next) => {
     const body = request.body;
+    const blog = {};
 
-    const blog = {
-        title: body.content,
-        author: body.author,
-        url: body.url,
-        likes: body.likes
-    };
+    if(typeof body.title!=='undefined' && body.title.length>0) {
+        blog.title=body.title;
+    }
+    if(typeof body.author!=='undefined' && body.author.length>0) {
+        blog.author=body.author;
+    }
+    if(typeof body.url!=='undefined' && body.url.length>0) {
+        blog.url=body.url;
+    }
+    if(typeof body.likes!=='undefined') {
+        blog.likes=body.likes;
+    }
 
     try {
         const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true });
