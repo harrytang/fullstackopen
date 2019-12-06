@@ -2,12 +2,14 @@ module.exports = {
     'env': {
         'browser': true,
         'commonjs': true,
-        'es6': true
+        'es6': true,
+        'jest': true
     },
     'extends': 'eslint:recommended',
     'globals': {
         'Atomics': 'readonly',
-        'SharedArrayBuffer': 'readonly'
+        'SharedArrayBuffer': 'readonly',
+        "process": true
     },
     'parserOptions': {
         'ecmaVersion': 2018
@@ -38,6 +40,6 @@ module.exports = {
             "error", { "before": true, "after": true }
         ],
         "no-console": 0,
-        "no-process-env": "warn"
+        "no-process-env": "off"
     }
 };
