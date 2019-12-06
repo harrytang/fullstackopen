@@ -18,7 +18,11 @@ const app = express();
 
 console.log('connecting to', config.MONGODB_URI);
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+})
     .then(() => {
         console.log('connected to MongoDB');
     })
