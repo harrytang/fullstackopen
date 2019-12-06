@@ -15,6 +15,22 @@ const dummy = (blogs) => {
 
 };
 
+const totalLikes = (blogs) => {
+    const result = blogs.reduce((accumulator, currentValue) => {
+        accumulator.likes+=currentValue.likes;
+        return accumulator;
+    });
+    return result.likes;
+};
+
+const favoriteBlog = (blogs) => {
+    return blogs.reduce((accumulator, currentValue) => {
+        return accumulator.likes > currentValue.likes ? accumulator : currentValue;
+    });
+};
+
 module.exports = {
-    dummy
+    dummy,
+    totalLikes,
+    favoriteBlog
 };
