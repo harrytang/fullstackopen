@@ -10,7 +10,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const config = require('./utils/config');
-const router = require('./controllers/blog');
+const blogRouter = require('./controllers/blog');
+const userRouter = require('./controllers/users');
 const middleware = require('./utils/middleware');
 
 
@@ -21,7 +22,8 @@ console.log('connecting to', config.MONGODB_URI);
 mongoose.connect(config.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
 })
     .then(() => {
         console.log('connected to MongoDB');
@@ -35,7 +37,8 @@ app.use(express.static('build'));
 app.use(bodyParser.json());
 app.use(middleware.requestLogger);
 
-app.use('/api/blogs', router);
+app.use('/api/blogs', blogRouter);
+app.use('/api/users', userRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
