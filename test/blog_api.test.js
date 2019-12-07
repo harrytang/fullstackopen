@@ -24,23 +24,18 @@ describe('Testing Blog API', () => {
         root=user;
     });
 
-    test('creation succeeds with a new blog', async () => {
+    test('creation no longer succeeds with a new blog b/c need authorization', async () => {
         const newBlog = {
             title: 'Blog title',
             author: 'Harry Tang',
             url: 'https://harrytang.xyz',
-            user: root._id
         };
 
         await api
             .post('/api/blogs')
             .send(newBlog)
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /application\/json/);
-
-        const blogsAtEnd = await helper.blogsInDb();
-        expect(blogsAtEnd.length).toBe(1);
-
     });
 });
 
