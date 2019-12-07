@@ -6,12 +6,13 @@
 
 const router = require('express').Router();
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 /**
  * get all blogs
  */
 router.get('/', async (request, response) => {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
     response.json(blogs.map(blog => blog.toJSON()));
 });
 
@@ -37,15 +38,22 @@ router.get('/:id', async (request, response, next) => {
 router.post('/', async (request, response, next) => {
     const body = request.body;
 
+    // find some user
+    const user = await User.findOne();
+
     const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes
+        likes: body.likes,
+        user: user._id
     });
 
     try {
         const savedBlog = await blog.save();
+        // update user
+        user.blogs=user.blogs.concat(savedBlog._id);
+        await user.save();
         response.json(savedBlog.toJSON());
     } catch (e) {
         next(e);
